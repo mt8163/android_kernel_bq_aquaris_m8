@@ -56,6 +56,7 @@
 #ifdef CONFIG_MTPROF
 #include "mt_cputime.h"
 #endif
+#include <linux/kcov.h>
 #include <linux/cpufreq.h>
 
 #include <asm/uaccess.h>
