@@ -124,6 +124,11 @@ MTK_WCN_BOOL mtk_wcn_wmt_func_off(ENUM_WMTDRV_TYPE_T type)
 	MTK_WCN_BOOL ret;
 
 	if (type == WMTDRV_TYPE_BT)
+#if WMT_EXP_HID_API_EXPORT
+		_mtk_wcn_wmt_psm_ctrl(MTK_WCN_BOOL_TRUE);
+#else
+		mtk_wcn_wmt_psm_ctrl(MTK_WCN_BOOL_TRUE);
+#endif
 		osal_printtimeofday("############ BT OFF ====>");
 
 	ret = mtk_wcn_wmt_func_ctrl(type, WMT_OPID_FUNC_OFF);
@@ -231,6 +236,12 @@ EXPORT_SYMBOL(mtk_wcn_wmt_therm_ctrl);
 #endif
 
 #if WMT_EXP_HID_API_EXPORT
+INT32 _mtk_wcn_wmt_psm_ctrl(MTK_WCN_BOOL flag)
+#else
+INT32 mtk_wcn_wmt_psm_ctrl(MTK_WCN_BOOL flag)
+#endif
+
+#if WMT_EXP_HID_API_EXPORT
 ENUM_WMTHWVER_TYPE_T _mtk_wcn_wmt_hwver_get(VOID)
 #else
 ENUM_WMTHWVER_TYPE_T mtk_wcn_wmt_hwver_get(VOID)
@@ -256,6 +267,8 @@ UINT32 mtk_wcn_wmt_ic_info_get(ENUM_WMT_CHIPINFO_TYPE_T type)
 #if WMT_EXP_HID_API_EXPORT
 EXPORT_SYMBOL(mtk_wcn_wmt_ic_info_get);
 #endif
+
+extern INT32 mtk_wcn_wmt_psm_ctrl(MTK_WCN_BOOL flag);
 
 #if WMT_EXP_HID_API_EXPORT
 MTK_WCN_BOOL _mtk_wcn_wmt_dsns_ctrl(ENUM_WMTDSNS_TYPE_T eType)
@@ -496,6 +509,7 @@ VOID mtk_wcn_wmt_exp_init(VOID)
 		.wmt_assert_cb = _mtk_wcn_wmt_assert,
 		.wmt_assert_timeout_cb = _mtk_wcn_wmt_assert_timeout,
 		.wmt_ic_info_get_cb = _mtk_wcn_wmt_ic_info_get,
+		.wmt_psm_ctrl_cb = _mtk_wcn_wmt_psm_ctrl,
 	};
 
 	mtk_wcn_wmt_exp_cb_reg(&wmtExpCb);
@@ -599,3 +613,5 @@ MTK_WCN_BOOL mtk_wcn_wmt_do_reset(ENUM_WMTDRV_TYPE_T type)
 	return 0 == iRet ? MTK_WCN_BOOL_TRUE : MTK_WCN_BOOL_FALSE;
 }
 EXPORT_SYMBOL(mtk_wcn_wmt_do_reset);
+
+EXPORT_SYMBOL(mtk_wcn_wmt_psm_ctrl);
