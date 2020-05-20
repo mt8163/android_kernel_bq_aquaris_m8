@@ -89,7 +89,7 @@ static UINT8 i_buf[BT_BUFFER_SIZE];	/* Input buffer of read() */
 static UINT8 o_buf[BT_BUFFER_SIZE];	/* Output buffer of write() */
 
 static struct semaphore wr_mtx, rd_mtx;
- tatic struct wake_lock bt_wakelock; 
+static struct wake_lock bt_wakelock; 
 /* Wait queue for poll and read */
 static wait_queue_head_t inq;
 static DECLARE_WAIT_QUEUE_HEAD(BT_wq);
@@ -255,7 +255,7 @@ OUT:
 
 ssize_t BT_read(struct file *filp, char __user *buf, size_t count, loff_t *f_pos)
 {
-	static int chip_reset_count;
+	//static int chip_reset_count;
 	INT32 retval = 0;
 
 	down(&rd_mtx);
@@ -411,7 +411,7 @@ long BT_unlocked_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 {
 	INT32 retval = 0;
 	ENUM_WMTHWVER_TYPE_T hw_ver_sym = WMTHWVER_INVALID;
-    UINT32 ver = 0;
+    //UINT32 ver = 0;
 
 	BT_DBG_FUNC("%s:  cmd: 0x%x\n", __func__, cmd);
 
@@ -554,7 +554,7 @@ static int BT_init(void)
 	init_waitqueue_head(&(inq));
 
 	/* Initialize wake lock */
-	wake_lock_init(&bt_wakelock, WAKE_LOCK_SUSPEND, "bt_drv")
+	wake_lock_init(&bt_wakelock, WAKE_LOCK_SUSPEND, "bt_drv");
 
 	return 0;
 
